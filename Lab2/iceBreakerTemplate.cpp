@@ -1,9 +1,14 @@
 #include<iostream>
 #include<fstream>
+
 /**
  * TO DO: 
  * Add <vector>, <cstdlib>, and <ctime>​
  */
+#include<vector>
+#include<ctime>
+#include<cstdlib>
+#include<random>
 
 using namespace std;
 
@@ -18,8 +23,11 @@ using namespace std;
 
 
 //------------------------PROTOTYPE-------------------------------------------
-void promptFile(vector<string> &); 
+void promptFile(vector<string> &);
 void printVec(vector<string>);
+int ranGen();
+bool readFile(string filename, vector<string> & vec);
+bool writeFile(string filename, const vector<string> & v0, const vector<string> & v1);
 
 /**
  * @brief randomly returns a number from 0 to 5.
@@ -34,8 +42,15 @@ void printVec(vector<string>);
  * 
  * @return int: index of question
  */
-int ranGen(){
-    int randomNumber = rand() % 6;  // 0 through 5
+int ranGen(size_t numQuestions){
+    // error catch
+    if (numQuestions == 0) return 0;
+
+    random_device rd;
+    mt19937 mt(rd());
+    uniform_int_distribution<int> dist(0, numQuestions - 1);
+
+    int randomNumber = dist(mt);  // 0 through 5
     return randomNumber;
 }
 
@@ -49,14 +64,14 @@ int ranGen(){
  * ​​​Return a bool instead in order to indicate whether the operation
  * succeeded or not
  */
-void readFile(string filename, vector<string> & vec) {
+bool readFile(string filename, vector<string> & vec) {
 
    ifstream inputFile(filename);
 
     //error handling
     if (!inputFile.is_open()) {
         cerr << "Error: Could not open file\n";
-        return;
+        return false;
     }
 
     string line;
@@ -66,7 +81,7 @@ void readFile(string filename, vector<string> & vec) {
     }
 
     inputFile.close();
-    return;
+    return true;
 }
 /**
  * @brief writes to filename with the first column from v0, second column from v1
@@ -88,19 +103,28 @@ void readFile(string filename, vector<string> & vec) {
  * -  pass by value (e.g. vector<string> v0),
  * -  pass by const reference (e.g. const vector<string> & v0),
  */
-void writeFile(string filename, vector<string> v0, vector<string> v1){
+bool writeFile(string filename, const vector<string> & v0, const vector<string> & v1){
+    // catch empty file error
+    if (v1.empty() || v0.empty()) {
+        cerr << "v1 or v0 not loaded yet";
+        return false;
+    }
+
 
     ofstream outputFile(filename);
      if (!outputFile) {
         cout << "Error: Could not create data.csv" << endl;
+        return false;
     }
 
     // write under the structure:
     // Student_Name, Question_#
     for(int i = 0; i < v0.size(); i++){
-        outputFile << v0[i] << "," << v1[ranGen()] << endl;
+        outputFile << v0[i] << "," << v1[ranGen(v1.size())] << endl;
     }
     outputFile.close();
+
+    return true;
 
 }
 
