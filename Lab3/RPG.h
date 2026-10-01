@@ -20,9 +20,17 @@ class RPG {
 
         // accessors
         string getName() const;
+        int getHitsTaken() const;
+        float getLuck() const;
+        float getExp() const;
+        int getLevel() const;
 
     private:
         string name;
+        int hits_taken;
+        float luck;
+        float exp;
+        int level;
 };
 
 #endif
