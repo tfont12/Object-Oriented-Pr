@@ -29,7 +29,7 @@ class RPG {
         void setName(string name);
         void updateExpLevel();
         void attack(RPG * opponent);
-        void printStats();
+        void printStats() const;
 
     private:
         string name;
