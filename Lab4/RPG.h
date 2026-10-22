@@ -25,6 +25,12 @@ class RPG {
         float getExp() const;
         int getLevel() const;
 
+        // extended
+        void setName(string name);
+        void updateExpLevel();
+        void attack(RPG * opponent);
+        void printStats();
+
     private:
         string name;
         int hits_taken;
