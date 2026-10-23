@@ -42,9 +42,7 @@ void Game::endRound(RPG *winner, RPG *loser, int loserIndex){
     winner->updateExpLevel();
 
     // remove loser from live players
-    set<int>::iterator it = live_players.begin();
-    advance(it, loserIndex);
-    live_players.erase(it);
+    live_players.erase(loserIndex);
 
     // print
     printf("%s\t won against %s\t\n", winner->getName().c_str(), loser->getName().c_str());
@@ -66,9 +64,13 @@ void Game::battleRound(){
     RPG* player2 = players[playerIndex2];
 
     // while both players are alive call player1->attack(player2) and vice versa
+
     while (player1->isAlive()==true && player2->isAlive() == true){
         player1->attack(player2);
-        player2->attack(player1);
+
+        if (player2->isAlive()){
+            player2->attack(player1);
+        }
     }
 
     // outside of the while loop, identify which player is alive
@@ -94,6 +96,3 @@ void Game::printFinalResults(){
         players[i]->printStats();
     }
 }
-
-// deconstructor
-Game::~Game(){}
