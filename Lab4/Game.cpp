@@ -49,3 +49,51 @@ void Game::endRound(RPG *winner, RPG *loser, int loserIndex){
     // print
     printf("%s\t won against %s\t\n", winner->getName().c_str(), loser->getName().c_str());
 }
+
+void Game::battleRound(){
+    // call selectPlayer twice and assign the values to playerIndex1 and playerIndex2
+    int playerIndex1 = selectPlayer();
+    int playerIndex2 = selectPlayer();
+
+    // if index 1 = index 2, call battleRound() again and return
+    if (playerIndex1 == playerIndex2){
+        battleRound();
+        return;
+    }
+
+    // create two RPG * called player 1 and player 2 using  players[playerIndex]
+    RPG* player1 = players[playerIndex1];
+    RPG* player2 = players[playerIndex2];
+
+    // while both players are alive call player1->attack(player2) and vice versa
+    while (player1->isAlive()==true && player2->isAlive() == true){
+        player1->attack(player2);
+        player2->attack(player1);
+    }
+
+    // outside of the while loop, identify which player is alive
+    // call endRound with for the correct respective players
+
+    if (player1->isAlive()){
+        endRound(player1,player2,playerIndex2);
+    } else if (player2->isAlive()){
+        endRound(player2,player1,playerIndex1);
+    }
+}
+
+// run battleRound() until there is only 1 player alive
+void Game::gameLoop(){
+    while(live_players.size() > 1){
+        battleRound();
+    }
+}
+
+// call printstats on all players
+void Game::printFinalResults(){
+    for(int i=0;i<players.size();i++){
+        players[i]->printStats();
+    }
+}
+
+// deconstructor
+Game::~Game(){}

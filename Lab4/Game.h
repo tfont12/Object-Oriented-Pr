@@ -17,7 +17,7 @@ class Game{
         void endRound(RPG* winner, RPG* loser, int loserIndex);
         void battleRound();
         void gameLoop();
-        void printFinalResults() const;
+        void printFinalResults();
 
     private:
         vector<RPG*> players;
